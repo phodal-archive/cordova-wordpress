@@ -7,9 +7,7 @@ angular.module('cordpress.services', [])
 			return $http.jsonp(url);
 		},
 		get: function (url) {
-			// Simple index lookup
 			return $http.jsonp(url);
 		}
 	}
-
 });

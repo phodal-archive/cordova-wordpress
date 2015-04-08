@@ -64,7 +64,4 @@ angular.module('cordpress.controllers', ['cordpress.services'])
 	}).error(function (data, status, headers, config) {
 		console.log('error');
 	});
-})
-
-.controller('PlaylistCtrl', function ($scope, $stateParams) {
 });

@@ -58,11 +58,11 @@ angular.module('cordpress', ['ionic', 'cordpress.controllers', 'cordpress.servic
     })
 
   .state('app.single', {
-    url: "/playlists/:playlistId",
+    url: "/posts/:postId",
     views: {
       'menuContent': {
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
+        templateUrl: "templates/post_detail.html",
+        controller: 'PostCtrl'
       }
     }
   });
