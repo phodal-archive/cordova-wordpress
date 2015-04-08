@@ -1,29 +1,75 @@
 angular.module('cordpress.controllers', ['cordpress.services'])
 
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
-	$scope.loginData = {};
+.controller('AppCtrl', function ($scope, $ionicModal, $timeout, $sce, DataLoader, $rootScope) {
 
-	$ionicModal.fromTemplateUrl('templates/login.html', {
-		scope: $scope
-	}).then(function (modal) {
-		$scope.modal = modal;
-	});
+    $rootScope.url = 'http://www.leanjs.net';
 
-	$scope.closeLogin = function () {
-		$scope.modal.hide();
-	};
+    $rootScope.callback = '_jsonp=JSON_CALLBACK';
 
-	$scope.login = function () {
-		$scope.modal.show();
-	};
+    $ionicModal.fromTemplateUrl('templates/login.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+      $scope.src = $sce.trustAsResourceUrl( $rootScope.url + '/?appp=login' );
+    });
 
-	$scope.doLogin = function () {
-		console.log('Doing login', $scope.loginData);
+    $scope.closeLogin = function() {
+      $scope.modal.hide();
+    };
 
-		$timeout(function () {
-			$scope.closeLogin();
-		}, 1000);
-	};
+    $scope.login = function() {
+      $scope.modal.show();
+    };
+
+    $scope.logUserIn = function( username, password ) {
+
+      console.log('Logging in...');
+
+      $scope.spinner = true;
+      $scope.loginMessage = null;
+
+      targetFrame = window.frames['login-iframe'];
+      targetFrame.postMessage( {
+        message: 'login',
+        username: username,
+        password: password
+
+      }, '*');
+
+    }
+
+    window.addEventListener('message', function(event) {
+      if( event.data.loggedin === true ) {
+        $scope.spinner = false;
+        console.log(event.data);
+        $scope.loggedin();
+        $scope.closeLogin();
+        localStorage.setItem('reactorUser', JSON.stringify( event.data ) );
+      }
+
+      if( event.data.loggedin === false )  {
+        $scope.spinner = false;
+        console.log(event.data.message);
+        $scope.loginMessage = event.data.message;
+        $scope.$apply();
+      }
+
+    });
+
+    $scope.loggedin = function() {
+      $scope.isUserLoggedIn = true;
+    }
+
+    $scope.logUserOut = function() {
+      $scope.$broadcast('logout');
+    }
+
+    $scope.$on('logout', function(event, msg) {
+      console.log('doing logout');
+      localStorage.removeItem('reactorUser');
+      $scope.isUserLoggedIn = false;
+      $scope.closeLogin();
+    });
 })
 
 .controller('PostCtrl', function ($scope, $stateParams, DataLoader, $ionicLoading, $rootScope, $sce) {
