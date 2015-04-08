@@ -47,12 +47,12 @@ angular.module('cordpress', ['ionic', 'cordpress.controllers', 'cordpress.servic
       }
     }
   })
-    .state('app.playlists', {
-      url: "/playlists",
+    .state('app.posts', {
+      url: "/posts",
       views: {
         'menuContent': {
-          templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
+          templateUrl: "templates/posts.html",
+          controller: 'PostsCtrl'
         }
       }
     })
@@ -67,5 +67,5 @@ angular.module('cordpress', ['ionic', 'cordpress.controllers', 'cordpress.servic
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/playlists');
+  $urlRouterProvider.otherwise('/app/posts');
 });

@@ -59,8 +59,7 @@ angular.module('cordpress.controllers', ['cordpress.services'])
 	var singlePostApi = $rootScope.url + '/wp-json/posts/' + '?' + $rootScope.callback;
 
 	DataLoader.get(singlePostApi).success(function (data, status, headers, config) {
-		$scope.post = data;
-		$scope.content = $sce.trustAsHtml(data.content);
+		$scope.posts = data;
 		$ionicLoading.hide();
 	}).error(function (data, status, headers, config) {
 		console.log('error');
