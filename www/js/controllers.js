@@ -1,6 +1,12 @@
 angular.module('cordpress.controllers', ['cordpress.services'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $sce, DataLoader, $rootScope) {
+  .config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.headers.common = 'Content-Type: application/json';
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  }])
+
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $sce, DataLoader, $rootScope, $http) {
 
     $rootScope.url = 'http://www.leanjs.net';
 
@@ -26,6 +32,18 @@ angular.module('cordpress.controllers', ['cordpress.services'])
 
       $scope.spinner = true;
       $scope.loginMessage = null;
+
+      $http({
+        url: 'http://www.leanjs.net/wp-json/users/me',
+        method: "POST",
+        data: { 'name' : username, 'password': password }
+      }).success(function (data, status, headers, config) {
+        $scope.data = data;
+        $scope.status = status;
+      }).error(function (data, status, headers, config) {
+          $scope.data = data;
+          $scope.status = status + ' ' + headers;
+        })
 
     };
 

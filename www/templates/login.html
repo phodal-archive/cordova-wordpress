@@ -22,6 +22,8 @@
           <button ng-click="logUserIn(username, password)" class="button button-block button-small button-positive">Login</button> </div>
       </div>
 
+      {{data}}{{status}}
+
       <div ng-if="isUserLoggedIn">
         <div class="list list-inset">
           <button ng-click="logUserOut()" class="button button-block button-small button-positive">Logout</button> </div>
@@ -36,6 +38,5 @@
       </div>
 
     </ion-content>
-
   </ion-modal-view>
 </div>
